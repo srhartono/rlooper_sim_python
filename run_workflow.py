@@ -133,7 +133,7 @@ def main():
                     
                     # Try to create fallback visualizations
                     try:
-                        fallback_result = subprocess.run([python_exe, "dag_fallback.py"], 
+                        fallback_result = subprocess.run([python_exe, "bin/dag_fallback.py"], 
                                               capture_output=True, text=True, timeout=30)
                         if fallback_result.returncode == 0:
                             print("✅ Created fallback DAG files: dag.txt and dag.html")
