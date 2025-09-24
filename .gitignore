@@ -1,0 +1,14 @@
+*.dot
+*.pdf
+rlooper_sim_python.code-workspace
+.venv
+__pycache__
+.snakemake
+results
+logs
+.venv/*
+__pycache__/*
+.snakemake/*
+results/*
+logs/*
+release/
