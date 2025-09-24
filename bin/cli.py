@@ -24,7 +24,7 @@ def main():
         description="Rlooper Simulation Python",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples :
+Examples:zz
   rlooper-sim example.fasta              # Run simulation on single file
   rlooper-sim --list-examples            # Show available example files
   rlooper-sim --copy-examples /path/to/  # Copy example files to directory
