@@ -48,10 +48,20 @@ class simulation_params():
 	naive_flag = False
 	verbose_flag = False
 	orig_flag = False
+	sigma = 0.07
+	a = 10
 	def setFastaFile(self,filename):
 		self.fasta_file = filename
 	def getFastaFile(self):
 		return(self.fasta_file)
+	def setSigma(self,sigma):
+		self.sigma = sigma
+	def getSigma(self):
+		return(self.sigma)
+	def seta(self,a):
+		self.a = a
+	def geta(self):
+		return(self.a)
 		
 def naive_forloop_rlooper(sequence, model, start, stop, structure, bp_energy, verbose):
 
@@ -80,7 +90,7 @@ def naive_forloop_rlooper(sequence, model, start, stop, structure, bp_energy, ve
 
 	mya = model.geta()
 
-	for n in range(start, 5):
+	for n in range(start, stop):
 		Gbp = 0.0
 		if n % 10 == 0:
 			logger.info(f"n: {n}, bftotal: {bftotal}")
@@ -96,8 +106,9 @@ def naive_forloop_rlooper(sequence, model, start, stop, structure, bp_energy, ve
 			myindex = myindex + 1
 		
 		for m in range(0, len(sequence)-n-1):
-			if m > model.getMaxLength():
+			if m > 200:#model.getMaxLength():
 				break
+			
 			curr_a = mya
 			
 			if n >= model.getnick() and n + m >= model.getnick() + model.getSelffoldlen():
@@ -141,6 +152,9 @@ def simulation_main(mysim):
 	mygene.loadFromFasta(mysim.getFastaFile())
 	mygene.printGene()
 	logger.info("Model parameters:")
+	mymodel.setSigma(mysim.getSigma())
+	mymodel.seta(mysim.geta())
+	# Set other model parameters as needed
 	logger.info(f"N: {mymodel.N}, sigma: {mymodel.sigma}, A: {mymodel.A}, C: {mymodel.C}, T: {mymodel.T}")
 	myres = naive_forloop_rlooper(mygene.getSequence(), mymodel, 0, mygene.getLength(), [], -1.0, True)
 	myres.index = np.arange(0,len(myres))
@@ -154,6 +168,7 @@ def simpeak(myres, npeak,gene_name):
 	randomindex = choice(myres.index, size=npeak, p=myres['probability']/myres['probability'].sum(), replace=True)
 	print(randomindex)
 	peaks = myres.loc[randomindex, :]
+	print(peaks[1:5])
 	peaks['start'] = peaks['n']
 	peaks['end'] = peaks['n'] + peaks['m'] + 1
 	peaks['chr'] = gene_name
@@ -164,4 +179,3 @@ def simpeak(myres, npeak,gene_name):
 def printout(myres):
 	open("rlooper_output.csv", "w").write(myres.to_csv(sep="\t",index=False))
 	return
-

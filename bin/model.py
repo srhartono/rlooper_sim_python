@@ -4,7 +4,7 @@ import logging
 
 class rloop_model():
 
-    nick = 0
+    nick = -1
     nicklen = 1
     selffoldlen=0
     maxLength=2000
@@ -56,19 +56,19 @@ class rloop_model():
 
     def setN(self,N):
         rloop_model.N = N
-        rloop_model.setAlpha(rloop_model.N*rloop_model.sigma*rloop_model.A)
+        rloop_model.setAlpha(rloop_model,rloop_model.N*rloop_model.sigma*rloop_model.A)
         rloop_model.k = (2200 * 0.0019858775 * rloop_model.T) / rloop_model.N
     def getN(self):
         return(rloop_model.N)
 
     def setSigma(self,s):
         rloop_model.sigma = s
-        rloop_model.setAlpha(rloop_model.N*rloop_model.sigma*rloop_model.A)
+        rloop_model.setAlpha(rloop_model,rloop_model.N*rloop_model.sigma*rloop_model.A)
     def getSigma(self):
         return(rloop_model.sigma)
 
-    def setAlpha(self,a):
-        rloop_model.alpha = a
+    def setAlpha(self,alpha):
+        rloop_model.alpha = alpha
     def getAlpha(self):
         return(rloop_model.alpha)
 
