@@ -1,5 +1,71 @@
 # rlooper_sim_python
-Rlooper Sim Python Implementation
+
+[![PyPI version](https://badge.fury.io/py/rlooper-sim-python.svg)](https://badge.fury.io/py/rlooper-sim-python)
+[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Rlooper with R-loop Peak Simulation - Python Implementation
+
+## Installation
+
+### Option 1: Install from PyPI (Recommended)
+
+```bash
+# Install the package
+pip install rlooper-sim-python
+
+# Run single simulation
+rlooper-sim example.fasta
+
+# Initialize and run workflow
+rlooper-workflow --init-project my_project
+cd my_project
+rlooper-workflow all
+```
+
+### Option 2: Install from Source
+
+```bash
+# Clone repository
+git clone https://github.com/srhartono/rlooper_sim_python.git
+cd rlooper_sim_python
+
+# Install in development mode
+pip install -e .
+
+# Or install for production
+pip install .
+```
+
+## Quick Start
+
+After installation, you can use rlooper in two ways:
+
+### 1. Single File Simulation
+```bash
+# Run simulation on a single FASTA file
+rlooper-sim my_sequence.fasta
+
+# Copy example files to current directory
+rlooper-sim --copy-examples .
+rlooper-sim example.fasta
+```
+
+### 2. Snakemake Workflow (Multiple Files)
+```bash
+# Initialize a new project
+rlooper-workflow --init-project my_rlooper_project
+cd my_rlooper_project
+
+# Run the complete workflow
+rlooper-workflow all
+
+# Generate DAG visualization
+rlooper-workflow dag
+
+# Generate summary report
+rlooper-workflow summary
+```
 
 ## Synopsis
 
