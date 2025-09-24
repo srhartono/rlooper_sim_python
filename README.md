@@ -62,6 +62,15 @@ python run_workflow.py all
   python run_workflow.py all
   ```
 
+#### Adding New Samples
+1. Place your FASTA files in the `input/` folder
+2. Add entries to `config.yaml`:
+   ```yaml
+   samples:
+     my_sample: "my_sample.fasta"    # References input/my_sample.fasta
+   ```
+3. Run the workflow: `python run_workflow.py all`
+
 #### Project Structure
 ```
 rlooper_sim_python/
@@ -114,19 +123,3 @@ results/
 └── summary_report.txt        # Summary of all samples
 ```
 
-#### Workflow Features
-- **Organized Structure**: Input files in `input/`, code in `bin/`, outputs in `results/`
-- **Parallel Processing**: Run multiple FASTA files simultaneously
-- **Organized Output**: Each sample gets its own results directory
-- **Dependency Management**: Automatically handles Python module dependencies
-- **Summary Reports**: Generate consolidated summaries of all results
-- **Reproducible**: Version-controlled workflow definition
-
-#### Adding New Samples
-1. Place your FASTA files in the `input/` folder
-2. Add entries to `config.yaml`:
-   ```yaml
-   samples:
-     my_sample: "my_sample.fasta"    # References input/my_sample.fasta
-   ```
-3. Run the workflow: `python run_workflow.py all`
