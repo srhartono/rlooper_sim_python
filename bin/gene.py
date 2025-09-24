@@ -19,7 +19,6 @@ class Gene():
 
     def parseHeader(self):
         pass
-
     def getName(self):
         return(Gene.gene_name)
     def setName(self,name):
@@ -34,7 +33,6 @@ class Gene():
         Gene.sequence = seq
     def getPos(self):
         return(Gene.pos)
-
     def setPos(self,p):
         Gene.pos = p
 
@@ -84,10 +82,4 @@ class Gene():
         gene.setSequence(list(sequence))
         gene.setName(header.split()[0][1:])  # Assuming the first word after '>' is the gene name
         return(gene)
-
-
-def unitTest():
-    mygene = Gene()
-    mygene.loadFromFasta('example.fasta')
-    mygene.printGene()
 

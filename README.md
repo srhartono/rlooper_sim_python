@@ -11,22 +11,56 @@ Rlooper Sim Python Implementation
 This project now includes a Snakemake workflow that automates the execution of rlooper simulations on multiple FASTA files.
 
 #### Prerequisites
-- Python 3.x
-- Install dependencies: `pip install -r requirements.txt`
+- Python 3.7 or higher
+
+#### Setup (One-time)
+Choose one of the following setup methods:
+
+**Method 1: Automatic setup (recommended)**
+```bash
+python setup_venv.py
+```
+
+**Method 2: Manual setup**
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate virtual environment
+# On Windows:
+.venv\Scripts\activate
+# On Unix/macOS:
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**Method 3: Platform-specific scripts**
+- Windows: `setup_venv.bat`
+- Unix/Linux: `bash setup_venv.sh`
 
 #### Quick Start
-1. Configure your input files in `config.yaml`
-2. Run the workflow (choose one method):
+1. **Setup** (first time only): `python setup_venv.py`
+2. **Configure** your input files in `config.yaml`
+3. **Run** the workflow:
 
-**Method 1: Using the wrapper script (recommended)**
 ```bash
 python run_workflow.py all
 ```
 
-**Method 2: Direct Snakemake command**
-```bash
-snakemake --cores 1
-```
+**Alternative methods:**
+- Direct Snakemake: `snakemake --cores 1` (if activated manually)
+- With venv activation: 
+  ```bash
+  # Windows
+  .venv\Scripts\activate
+  python run_workflow.py all
+  
+  # Unix/macOS  
+  source .venv/bin/activate
+  python run_workflow.py all
+  ```
 
 #### Project Structure
 ```

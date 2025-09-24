@@ -53,7 +53,6 @@ class simulation_params():
 	def getFastaFile(self):
 		return(self.fasta_file)
 		
-
 def naive_forloop_rlooper(sequence, model, start, stop, structure, bp_energy, verbose):
 
 	myres = pd.DataFrame()
@@ -134,8 +133,6 @@ def naive_forloop_rlooper(sequence, model, start, stop, structure, bp_energy, ve
 	
 	return(myres)
 
-
-
 def simulation_main(mysim):
 	logger.info("Simulation main function")
 	logger.info(mysim.fasta_file)
@@ -163,8 +160,6 @@ def simpeak(myres, npeak,gene_name):
 	peaks.sort_values(by=['chr','start','end'], ascending=True, inplace=True)
 	peaks['strand'] = '+'
 	open("rlooper_peaks.csv", "w").write(peaks[['chr','start','end','probability','m','strand']].to_csv(sep="\t",index=False))
-
-
 
 def printout(myres):
 	open("rlooper_output.csv", "w").write(myres.to_csv(sep="\t",index=False))

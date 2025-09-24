@@ -1,5 +1,27 @@
 # Snakemake workflow for rlooper simulation
+import os
+import sys
+import platform
+from pathlib import Path
+
 configfile: "config.yaml"
+
+def get_python_executable():
+    """Automatically detect the Python executable to use (venv or system)"""
+    # Get project directory (where Snakefile is located)
+    project_dir = Path(workflow.basedir).absolute()
+    
+    # Check for virtual environment
+    if platform.system() == "Windows":
+        venv_python = project_dir / ".venv" / "Scripts" / "python.exe"
+    else:
+        venv_python = project_dir / ".venv" / "bin" / "python"
+    
+    if venv_python.exists():
+        return str(venv_python)
+    else:
+        # Fall back to system Python
+        return sys.executable
 
 # Define the target rule that specifies all final outputs
 rule all:
@@ -48,7 +70,7 @@ rule run_rlooper_simulation:
             fasta_path = os.path.join(original_dir, input.fasta)
             main_path = os.path.join(original_dir, "bin/main.py")
             log_path = os.path.join(original_dir, log[0])
-            python_exe = "C:/cygwin64/home/srhar/rlooper_sim_python/.venv/Scripts/python.exe"
+            python_exe = get_python_executable()
             
             # Set PYTHONPATH to include the bin directory
             env = os.environ.copy()
