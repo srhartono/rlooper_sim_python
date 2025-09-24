@@ -27,7 +27,8 @@ def get_python_executable():
 rule all:
     input:
         expand("results/{sample}/rlooper_output.csv", sample=config["samples"]),
-        expand("results/{sample}/rlooper_peaks.csv", sample=config["samples"])
+        expand("results/{sample}/rlooper_peaks.csv", sample=config["samples"]),
+        expand("results/{sample}/rlooper_peaks_plot.png", sample=config["samples"])
 
 # Rule to run rlooper simulation for each FASTA file
 rule run_rlooper_simulation:
@@ -75,6 +76,47 @@ rule run_rlooper_simulation:
             sys.exit(1)
         else:
             print(f"Simulation completed for {wildcards.sample}")
+
+# Rule to create peak visualization plots
+rule create_peak_plots:
+    input:
+        peaks = "results/{sample}/rlooper_peaks.csv"
+    output:
+        plot = "results/{sample}/rlooper_peaks_plot.png"
+    log:
+        "logs/{sample}/grapher.log"
+    run:
+        import os
+        import subprocess
+        import sys
+        from pathlib import Path
+        
+        # Create log directory
+        os.makedirs(os.path.dirname(log[0]), exist_ok=True)
+        
+        # Get absolute paths
+        peaks_path = os.path.abspath(input.peaks)
+        plot_path = os.path.abspath(output.plot)
+        log_path = os.path.abspath(log[0])
+        python_exe = get_python_executable()
+        
+        # Run the grapher using the package module
+        cmd = [python_exe, "-m", "rlooper_sim_python.grapher", 
+               "-i", peaks_path, "-o", plot_path]
+        
+        print(f"Creating plot: {' '.join(cmd)}")
+        
+        with open(log_path, 'w') as log_file:
+            result = subprocess.run(cmd, stdout=log_file, stderr=subprocess.STDOUT)
+        
+        if result.returncode != 0:
+            print(f"Plot creation failed for {wildcards.sample}. Check log: {log_path}")
+            # Read and display the error log
+            with open(log_path, 'r') as f:
+                print(f.read())
+            print("⚠️  Plot creation failed but continuing workflow...")
+        else:
+            print(f"✅ Plot created for {wildcards.sample}: {plot_path}")
 
 # Rule to create a summary report of all results
 rule create_summary:

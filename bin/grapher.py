@@ -13,12 +13,12 @@ def main():
     myargs = parse_arg()
     if myargs.input:
         try:
-            print(f"📖 Reading peaks from: {myargs.input}")
+            print(f"Reading peaks from: {myargs.input}")
             peaks = pd.read_csv(myargs.input, sep='\t')  # Use tab separator for CSV files from rlooper
-            print(f"📊 Loaded {len(peaks)} peaks")
+            print(f"Loaded {len(peaks)} peaks")
             print(f"Columns: {list(peaks.columns)}")
         except Exception as e:
-            print(f"❌ Error reading input file: {e}")
+            print(f"Error reading input file: {e}")
             return
     else:
         print("\nUsage: grapher.py -i <input_peak_file> -o <output_graph_file>")
@@ -29,11 +29,11 @@ def main():
     else:
         output_file = 'rloop_peaks.png'
     
-    print(f"🎨 Creating graph: {output_file}")
+    print(f"Creating graph: {output_file}")
     try:
         graph_compressed_pileup(peaks, output_file)
     except Exception as e:
-        print(f"❌ Error creating graph: {e}")
+        print(f"Error creating graph: {e}")
         import traceback
         traceback.print_exc()
 

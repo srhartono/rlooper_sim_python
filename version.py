@@ -1,6 +1,6 @@
 # Rlooper Simulation Python - Version Information
 
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 __release_date__ = "2025-09-24"
 __author__ = "srhartono"
 __description__ = "Rlooper with R-loop Peak Simulator (Python Implementation)"
