@@ -41,7 +41,7 @@ class Gene():
         logger.info("Header: " + Gene.header)
         logger.info("Position: " + Gene.pos.chromsome + ":" + str(Gene.pos.start_pos) + "-" + str(Gene.pos.end_pos) + " (" + Gene.pos.strand + ")")
         logger.info("Sequence Length: " + str(len(Gene.sequence)))
-        logger.info("Sequence: " + ''.join(Gene.sequence))
+        logger.info("Sequence: " + ''.join(Gene.sequence[0:10]) + ("..." if len(Gene.sequence) > 10 else ""))
         logger.info("Ground State Energy: " + str(Gene.ground_state_energy))
 
     def getGroundStateEnergy(self):

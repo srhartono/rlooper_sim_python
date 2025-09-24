@@ -1,4 +1,4 @@
-# rlooper_sim_python
+# rlooper_sim_python v1.0.5
 
 [![PyPI version](https://badge.fury.io/py/rlooper-sim-python.svg)](https://badge.fury.io/py/rlooper-sim-python)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)

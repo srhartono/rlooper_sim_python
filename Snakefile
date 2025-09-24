@@ -32,14 +32,7 @@ rule all:
 # Rule to run rlooper simulation for each FASTA file
 rule run_rlooper_simulation:
     input:
-        fasta = lambda wildcards: f"input/{config['samples'][wildcards.sample]}",
-        energy = "bin/energy.csv",
-        # Python module dependencies
-        main_script = "bin/main.py",
-        simulation_module = "bin/simulation.py",
-        model_module = "bin/model.py", 
-        gene_module = "bin/gene.py",
-        structure_module = "bin/structure.py"
+        fasta = lambda wildcards: f"input/{config['samples'][wildcards.sample]}"
     output:
         peaks = "results/{sample}/rlooper_peaks.csv",
         output_data = "results/{sample}/rlooper_output.csv"
@@ -49,46 +42,39 @@ rule run_rlooper_simulation:
         "logs/{sample}/rlooper_simulation.log"
     run:
         import os
-        import shutil
+        import subprocess
+        import sys
+        from pathlib import Path
         
         # Create output directory
         os.makedirs(params.output_dir, exist_ok=True)
         
-        # Create log directory
+        # Create log directory  
         os.makedirs(os.path.dirname(log[0]), exist_ok=True)
         
-        # Change to output directory
-        original_dir = os.getcwd()
-        os.chdir(params.output_dir)
+        # Get absolute paths
+        fasta_path = os.path.abspath(input.fasta)
+        log_path = os.path.abspath(log[0])
+        output_dir = os.path.abspath(params.output_dir)
+        python_exe = get_python_executable()
         
-        try:
-            # Copy energy.csv to output directory (required by simulation)
-            shutil.copy2(os.path.join(original_dir, "bin/energy.csv"), "energy.csv")
-            
-            # Run the rlooper simulation
-            import subprocess
-            fasta_path = os.path.join(original_dir, input.fasta)
-            main_path = os.path.join(original_dir, "bin/main.py")
-            log_path = os.path.join(original_dir, log[0])
-            python_exe = get_python_executable()
-            
-            # Set PYTHONPATH to include the bin directory
-            env = os.environ.copy()
-            env['PYTHONPATH'] = os.path.join(original_dir, "bin")
-            
-            with open(log_path, 'w') as log_file:
-                result = subprocess.run([python_exe, main_path, fasta_path], 
-                                      stdout=log_file, stderr=subprocess.STDOUT, env=env)
-            
-            # Move outputs to current directory if they were created in the parent
-            if os.path.exists(os.path.join(original_dir, "rlooper_output.csv")):
-                shutil.move(os.path.join(original_dir, "rlooper_output.csv"), "rlooper_output.csv")
-            if os.path.exists(os.path.join(original_dir, "rlooper_peaks.csv")):
-                shutil.move(os.path.join(original_dir, "rlooper_peaks.csv"), "rlooper_peaks.csv")
-                
-        finally:
-            # Return to original directory
-            os.chdir(original_dir)
+        # Run the rlooper simulation using the installed CLI
+        cmd = [python_exe, "-m", "rlooper_sim_python.cli", 
+               fasta_path, "--output-dir", output_dir]
+        
+        print(f"Running: {' '.join(cmd)}")
+        
+        with open(log_path, 'w') as log_file:
+            result = subprocess.run(cmd, stdout=log_file, stderr=subprocess.STDOUT)
+        
+        if result.returncode != 0:
+            print(f"Simulation failed for {wildcards.sample}. Check log: {log_path}")
+            # Read and display the error log
+            with open(log_path, 'r') as f:
+                print(f.read())
+            sys.exit(1)
+        else:
+            print(f"Simulation completed for {wildcards.sample}")
 
 # Rule to create a summary report of all results
 rule create_summary:
@@ -133,3 +119,4 @@ rule clean:
             shutil.rmtree("results")
         if os.path.exists("logs"):
             shutil.rmtree("logs")
+        print("🧹 Cleaned all output files and directories")

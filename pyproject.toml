@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rlooper-sim-python"
+version = "1.0.6"
+authors = [
+    {name = "srhartono", email = "srhartono@ucdavis.edu"},
+]
+description = "Rlooper with R-loop Peak Simulation - Python Implementation"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics"
+]
+keywords = ["rlooper", "simulation", "bioinformatics", "snakemake", "genomics"]
+dependencies = [
+    "pandas>=1.3.0",
+    "numpy>=1.20.0",
+    "snakemake>=7.0.0",
+    "pyyaml>=5.0.0",
+]
+
+[project.optional-dependencies]
+viz = ["graphviz>=0.20.0"]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "flake8",
+    "twine",
+    "build",
+]
+
+[project.urls]
+Homepage = "https://github.com/srhartono/rlooper_sim_python"
+Repository = "https://github.com/srhartono/rlooper_sim_python"
+Issues = "https://github.com/srhartono/rlooper_sim_python/issues"
+Documentation = "https://github.com/srhartono/rlooper_sim_python#readme"
+
+[project.scripts]
+rlooper-sim = "rlooper_sim_python.cli:main"
+rlooper-workflow = "rlooper_sim_python.workflow:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rlooper_sim_python*"]
+
+[tool.setuptools.package-data]
+"rlooper_sim_python" = ["data/*.csv", "data/*.yaml", "examples/*.fasta", "Snakefile"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

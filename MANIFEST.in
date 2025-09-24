@@ -1,0 +1,37 @@
+# Include important text files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include requirements.txt
+include requirements-frozen.txt
+
+# Include configuration files
+include config.yaml
+include Snakefile
+include pyproject.toml
+
+# Include setup scripts
+include setup.py
+include setup.bat
+include setup.sh
+
+# Include package data
+recursive-include rlooper_sim_python/data *.csv
+recursive-include rlooper_sim_python/examples *.fasta
+
+# Include documentation
+include RELEASE_GUIDE.md
+recursive-include docs *
+
+# Exclude unnecessary files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *~
+global-exclude .DS_Store
+global-exclude .git*
+prune __pycache__
+prune .venv
+prune .snakemake
+prune results
+prune logs
+prune release

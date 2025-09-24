@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple DAG visualizer using Python libraries as fallback when Graphviz is not available
+Simple DAG visualizer as fallback when Graphviz is not available
 """
 
 import sys
@@ -118,8 +118,7 @@ def create_html_dag(nodes, edges):
     
     return html_content
 
-def main():
-    dot_file = Path("dag.dot")
+def main(dot_file):
     
     if not dot_file.exists():
         print("❌ dag.dot not found. Run 'python run_workflow.py dag' first.")
