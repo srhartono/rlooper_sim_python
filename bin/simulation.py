@@ -120,7 +120,7 @@ def naive_forloop_rlooper(sequence, model, start, stop, structure, bp_energy, ve
 			bftotal += currbf
 
 
-			myres2 = pd.DataFrame.from_dict({'myindex': [myindex],'n': [n], 'm': [m], 'Gsigma': [Gsigma[m+1]], 'Gbp': [Gbp], 'a': [curr_a], 'G': [G], 'bf': [currbf]})
+			myres2 = pd.DataFrame.from_dict({'index': [myindex],'n': [n], 'm': [m], 'Gsigma': [Gsigma[m+1]], 'Gbp': [Gbp], 'a': [curr_a], 'G': [G], 'bf': [currbf]})
 			
 			if n == 0 and m == 0:
 				myres = myres2

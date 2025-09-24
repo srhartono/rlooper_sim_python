@@ -1,0 +1,19 @@
+# Configuration file for rlooper simulation Snakemake workflow
+
+# Define input FASTA files and their sample names
+samples:
+  example: "example.fasta"
+  example_short: "example_short.fasta"
+
+# You can add more samples by adding entries like:
+# samples:
+#   sample1: "path/to/sample1.fasta"
+#   sample2: "path/to/sample2.fasta"
+#   example: "example.fasta"
+#   example_short: "example_short.fasta"
+
+# Optional: Add other configuration parameters here
+# simulation_params:
+#   minlength: 2
+#   dynamic_window_size: 15
+#   power_threshold: 1
