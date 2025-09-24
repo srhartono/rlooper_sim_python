@@ -1,5 +1,10 @@
-*.dot
-*.pdf
+ExperimentalScripts
+dag.dot
+dag.pdf
+dag.svg
+dag.png
+dag.html
+dag.txt
 rlooper_sim_python.code-workspace
 .venv
 __pycache__

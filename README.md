@@ -107,6 +107,7 @@ samples:
 - `python run_workflow.py summary` - Generate summary report
 - `python run_workflow.py clean` - Remove all output files
 - `python run_workflow.py dry-run` - Show what would be executed
+- `python run_workflow.py dag` - Generate workflow DAG visualization
 
 **Direct Snakemake commands:**
 - `snakemake --cores 1` - Run all simulations
@@ -122,4 +123,38 @@ results/
 │   └── energy.csv            # Copy of energy parameters
 └── summary_report.txt        # Summary of all samples
 ```
+
+#### DAG Visualization (Optional)
+
+To generate workflow diagrams as PDFs, you need to install Graphviz:
+
+**Windows:**
+```bash
+# Option 1: Using Chocolatey
+choco install graphviz
+
+# Option 2: Using winget
+winget install graphviz
+
+# Option 3: Manual download from https://graphviz.org/download/
+```
+
+**macOS:**
+```bash
+brew install graphviz
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install graphviz
+```
+
+**After installing Graphviz:**
+```bash
+python run_workflow.py dag  # Creates dag.dot and dag.pdf
+```
+
+**Without Graphviz installed:**
+- `python run_workflow.py dag` will create `dag.dot` (text format)
+- View online at: http://magjac.com/graphviz-visual-editor/
 

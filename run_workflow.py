@@ -77,7 +77,7 @@ def main():
     print(f"Running: {' '.join(snakemake_cmd)}")
     
     if generate_dag:
-        # For DAG generation, we'll save as DOT file and try to convert to PDF
+        # For DAG generation, we'll save as DOT file and try to convert to multiple formats
         try:
             # First, run snakemake --dag to get the DOT format
             dag_process = subprocess.run(snakemake_cmd, capture_output=True, text=True)
@@ -86,38 +86,81 @@ def main():
                 # Save DOT format to file
                 with open("dag.dot", "w") as f:
                     f.write(dag_process.stdout)
-                print("DAG saved as dag.dot")
+                print("✅ DAG saved as dag.dot")
                 
-                # Try to convert to PDF using dot command
+                # Try to convert to multiple formats using dot command
+                formats_created = []
                 try:
-                    dot_process = subprocess.run(
+                    # Try PDF
+                    pdf_process = subprocess.run(
                         ["dot", "-Tpdf", "-o", "dag.pdf", "dag.dot"], 
-                        capture_output=True,
-                        text=True
+                        capture_output=True, text=True, timeout=30
                     )
+                    if pdf_process.returncode == 0:
+                        formats_created.append("dag.pdf")
                     
-                    if dot_process.returncode == 0:
-                        print("DAG visualization saved as dag.pdf")
-                        print("You can also view dag.dot in any text editor or online DOT viewer")
-                    else:
-                        print(f"Warning: Could not create PDF ({dot_process.stderr.strip()})")
-                        print("DAG is available as dag.dot - you can:")
-                        print("  1. View it in a text editor")
-                        print("  2. Use an online DOT viewer like http://magjac.com/graphviz-visual-editor/")
-                        print("  3. Install Graphviz to convert to PDF: https://graphviz.org/download/")
+                    # Try SVG (web-friendly)
+                    svg_process = subprocess.run(
+                        ["dot", "-Tsvg", "-o", "dag.svg", "dag.dot"], 
+                        capture_output=True, text=True, timeout=30
+                    )
+                    if svg_process.returncode == 0:
+                        formats_created.append("dag.svg")
                         
+                    # Try PNG
+                    png_process = subprocess.run(
+                        ["dot", "-Tpng", "-o", "dag.png", "dag.dot"], 
+                        capture_output=True, text=True, timeout=30
+                    )
+                    if png_process.returncode == 0:
+                        formats_created.append("dag.png")
+                        
+                except subprocess.TimeoutExpired:
+                    print("⚠️  Graphviz conversion timed out")
                 except FileNotFoundError:
-                    print("DOT command not found, but DAG saved as dag.dot")
-                    print("To convert to PDF, install Graphviz from https://graphviz.org/download/")
-                    print("Then run: dot -Tpdf -o dag.pdf dag.dot")
+                    pass  # Handle below
+                
+                if formats_created:
+                    print(f"✅ DAG visualizations created: {', '.join(formats_created)}")
+                    print("📊 View the DAG:")
+                    for fmt in formats_created:
+                        if fmt.endswith('.svg'):
+                            print(f"  - Open {fmt} in web browser (recommended)")
+                        else:
+                            print(f"  - Open {fmt}")
+                else:
+                    print("⚠️  Graphviz not found or not working. Creating fallback visualizations...")
+                    
+                    # Try to create fallback visualizations
+                    try:
+                        fallback_result = subprocess.run([python_exe, "dag_fallback.py"], 
+                                              capture_output=True, text=True, timeout=30)
+                        if fallback_result.returncode == 0:
+                            print("✅ Created fallback DAG files: dag.txt and dag.html")
+                        else:
+                            print("⚠️  Fallback visualization failed")
+                    except:
+                        print("⚠️  Could not create fallback visualizations")
+                    
+                    print()
+                    print("🔧 To create high-quality diagrams, install Graphviz:")
+                    print("  Windows: winget install graphviz  OR  choco install graphviz")
+                    print("  macOS:   brew install graphviz") 
+                    print("  Linux:   sudo apt-get install graphviz")
+                    print()
+                    print("💡 Current viewing options:")
+                    print("  1. Open dag.html in web browser (if created)")
+                    print("  2. View dag.txt for text representation")
+                    print("  3. Online viewer: http://magjac.com/graphviz-visual-editor/")
+                    print("  4. VS Code extension: 'Graphviz Interactive Preview'")
                 
                 return 0
             else:
-                print(f"Error running snakemake: {dag_process.stderr}")
+                print(f"❌ Error generating DAG: {dag_process.stderr}")
                 return dag_process.returncode
                 
         except Exception as e:
-            print(f"Error generating DAG: {e}")
+            print(f"❌ Error generating DAG: {e}")
             return 1
     else:
         # Normal execution
